@@ -7,4 +7,5 @@ php:
 sudo: false
 
 script:
+  - composer update && ./vendor/bin/install-phalcon.sh
   - cd Phalcon-Config && composer update && ./vendor/bin/phpunit
