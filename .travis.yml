@@ -6,6 +6,10 @@ php:
 
 sudo: false
 
+before_install:
+  - pecl channel-update pecl.php.net
+  - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install yaml < /dev/null &)
+  
 script:
   - composer update && ./vendor/bin/install-phalcon.sh
   - cd Phalcon-Config && composer update && ./vendor/bin/phpunit
