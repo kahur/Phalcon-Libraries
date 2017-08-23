@@ -1,0 +1,14 @@
+{
+  "name" : "AW/PhalconConfig",
+  "version" : "1.0",
+  "author" : "Kamil Hurajt",
+  "autoload" : {
+    "psr-4" : {
+      "AW\\PhalconConfig\\" : "src/",
+      "AW\\PhalconConfig\\Tests\\" : "tests/"
+    }
+  },
+  "require": {
+    "phpunit/phpunit": "^6.3"
+  }
+}

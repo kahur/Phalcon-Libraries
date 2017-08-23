@@ -1,0 +1,14 @@
+
+import:
+  - { resource: 'tests/resources/test-config.yml' }
+
+test: test
+test1:
+  test: value
+
+testSub:
+  test:
+    test: test
+
+testReference:
+  test: "@test"
