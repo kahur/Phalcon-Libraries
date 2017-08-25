@@ -21,7 +21,7 @@ class Importer implements ImporterInterface
      * @param Config $config
      * @return Config
      */
-    public function import(Config $config, \Closure $adapterCallback)
+    public function import(Config $config, callable $adapterCallback)
     {
         foreach ($config->import as $resourceConfig) {
             if (!file_exists($resourceConfig->resource)) {

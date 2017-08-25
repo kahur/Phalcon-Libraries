@@ -18,5 +18,5 @@ interface ImporterInterface
      * @param Config $config
      * @return Config
      */
-    public function import(Config $config, \Closure $adapterCallback);
+    public function import(Config $config, callable $adapterCallback);
 }

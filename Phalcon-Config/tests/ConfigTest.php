@@ -10,8 +10,8 @@ namespace AW\PhalconConfig\Tests;
 
 use AW\PhalconConfig\Config;
 use AW\PhalconConfig\Exceptions\UnsupportedAdapter;
-use AW\PhalconConfig\Inerfaces\ImporterInterface;
-use AW\PhalconConfig\Inerfaces\ReaderInterface;
+use AW\PhalconConfig\Interfaces\ImporterInterface;
+use AW\PhalconConfig\Interfaces\ReaderInterface;
 use AW\PhalconConfig\Tests\Stubs\TestClass;
 use Phalcon\Config\Adapter\Json;
 use Phalcon\Config\Adapter\Yaml;
