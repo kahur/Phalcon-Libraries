@@ -1,0 +1,6 @@
+{
+   "name" : "Phalcon-Libraries",
+   "require-dev" : {
+     "techpivot/phalcon-ci-installer": "~1.0"
+   }
+}
