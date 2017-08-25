@@ -12,3 +12,12 @@ testSub:
 
 testReference:
   test: "@test"
+
+services:
+  myService:
+    class: \MyService
+    arguments:
+      - "@services.secondService"
+
+  secondService:
+    class: \SecondService

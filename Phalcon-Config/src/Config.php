@@ -12,9 +12,8 @@ use AW\PhalconConfig\Exceptions\ClassNotFound;
 use AW\PhalconConfig\Exceptions\FileNotFound;
 use AW\PhalconConfig\Exceptions\FileTypeNotSupported;
 use AW\PhalconConfig\Exceptions\UnsupportedAdapter;
-use AW\PhalconConfig\Inerfaces\ImporterInterface;
-use AW\PhalconConfig\Inerfaces\ReaderInterface;
-use Phalcon\Annotations\Reader;
+use AW\PhalconConfig\Interfaces\ImporterInterface;
+use AW\PhalconConfig\Interfaces\ReaderInterface;
 
 class Config
 {
