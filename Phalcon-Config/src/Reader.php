@@ -7,6 +7,7 @@
  */
 
 namespace AW\PhalconConfig;
+
 use AW\PhalconConfig\Interfaces\ReaderInterface;
 use AW\PhalconConfig\Reader\Value;
 use Phalcon\Config;
@@ -107,5 +108,13 @@ class Reader implements ReaderInterface
         }
 
         return $this->config->toArray();
+    }
+
+    /**
+     * @param Config $config]
+     */
+    public function merge(Config $config)
+    {
+        $this->config->merge($config);
     }
 }

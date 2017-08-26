@@ -1,0 +1,8 @@
+test: test
+
+services:
+  myService:
+    class: \AW\PhalconContainerBuilder\Test\Stubs\TestClass
+    arguments:
+      - test
+      - test1

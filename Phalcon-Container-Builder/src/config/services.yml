@@ -1,0 +1,15 @@
+
+testReference: test
+
+services:
+  myService:
+    class: \MyService
+    arguments:
+      - "@services.testService"
+      - serviceargv
+
+  testService:
+    class: \TestService
+    arguments:
+      - someargv
+      - "@testReference"

@@ -9,6 +9,7 @@
 namespace AW\PhalconConfig\Tests;
 
 use AW\PhalconConfig\Reader;
+use Phalcon\Config;
 use Phalcon\Config\Adapter\Yaml;
 use PHPUnit\Framework\TestCase;
 
@@ -72,6 +73,28 @@ class ReaderTest extends TestCase
     {
         $reader = (new Reader())->fromConfig($this->config);
         $this->assertEquals('test', $reader->testReference->test);
+    }
+
+    public function testMerge()
+    {
+        $config1 = new Config([
+            'test' => 'tesst1'
+        ]);
+
+        $config2 = new Config([
+            'cf2test' => 'cf2test'
+        ]);
+
+        $reader = (new Reader())->fromConfig($config1);
+        $reader->merge($config2);
+
+        $data = $reader->toArray();
+        $expected = [
+            'test' => 'tesst1',
+            'cf2test' => 'cf2test'
+        ];
+
+        $this->assertEquals($expected, $data);
     }
 
 

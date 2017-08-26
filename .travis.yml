@@ -6,6 +6,10 @@ php:
 
 sudo: false
 
+notifications:
+  email: false
+  slack: "kompitech:LQltpoDQG8cAjMiGxwY9pWGf"
+
 before_install:
   - pecl channel-update pecl.php.net
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install yaml < /dev/null &)

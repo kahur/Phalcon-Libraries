@@ -6,15 +6,16 @@
  * Time: 02:36
  */
 
+declare(strict_types=1);
+
 namespace AW\PhalconConfig;
 
 use AW\PhalconConfig\Exceptions\ClassNotFound;
 use AW\PhalconConfig\Exceptions\FileNotFound;
 use AW\PhalconConfig\Exceptions\FileTypeNotSupported;
 use AW\PhalconConfig\Exceptions\UnsupportedAdapter;
-use AW\PhalconConfig\Inerfaces\ImporterInterface;
-use AW\PhalconConfig\Inerfaces\ReaderInterface;
-use Phalcon\Annotations\Reader;
+use AW\PhalconConfig\Interfaces\ImporterInterface;
+use AW\PhalconConfig\Interfaces\ReaderInterface;
 
 class Config
 {
@@ -103,5 +104,20 @@ class Config
 
         return $this->reader->fromConfig($config);
 
+    }
+
+    /**
+     * @param string $path
+     * @throws FileNotFound
+     */
+    public function attach(string $path)
+    {
+        if (!file_exists($path)) {
+            throw new FileNotFound('File '.$path.' not found');
+        }
+
+        $adapterClass = $this->getAdapter($path);
+        $adapter = new $adapterClass($path);
+        $this->reader->merge($adapter);
     }
 }
