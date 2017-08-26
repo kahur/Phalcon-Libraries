@@ -1,11 +1,13 @@
 {
    "name" : "Phalcon-Libraries",
-   "psr-4" : {
-      "AW\\PhalconContainerBuilder\\" : "Phalcon-Container-Builder/src/",
-      "AW\\PhalconConfig\\Test\\" : "Phalcon-Container-Builder/tests/",
-      "AW\\PhalconConfig\\" : "Phalcon-Config/src/",
-      "AW\\PhalconContainerBuilder\\Test\\" : "Phalcon-Container-Builder/tests/"
-    },
+   "autoload" : {
+      "psr-4" : {
+         "AW\\PhalconContainerBuilder\\" : "Phalcon-Container-Builder/src/",
+         "AW\\PhalconConfig\\Test\\" : "Phalcon-Container-Builder/tests/",
+         "AW\\PhalconConfig\\" : "Phalcon-Config/src/",
+         "AW\\PhalconContainerBuilder\\Test\\" : "Phalcon-Container-Builder/tests/"
+       }
+   },   
    "require-dev" : {
      "techpivot/phalcon-ci-installer": "~1.0"
    }
