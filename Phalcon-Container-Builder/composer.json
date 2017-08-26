@@ -2,6 +2,9 @@
   "name" : "AW/PhalconContainerBuilder",
   "version" : "1.0",
   "author" : "Kamil Hurajt",
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/KompiTech/Phalcon-Libraries.git" }
+  ],
   "autoload" : {
     "psr-4" : {
       "AW\\PhalconContainerBuilder\\" : "src/",

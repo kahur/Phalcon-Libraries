@@ -1,0 +1,4 @@
+# tests/resources/attach.yml
+
+attachTest:
+  test: test
