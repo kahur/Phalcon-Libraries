@@ -63,10 +63,10 @@ class Builder
 
         $injectArgs = [];
         foreach ($arguments as $name => $argument) {
-
-            $value = [$name => $this->getValue($argument, $name)];
+            $value = $this->getValue($argument, $name);
 
             if (is_array($value)) {
+                $value = [$name => $value];
                 $injectArgs = array_merge($injectArgs, $value);
             } else {
                 $injectArgs[$name] = $value;
