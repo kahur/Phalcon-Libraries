@@ -59,7 +59,7 @@ class Builder
      */
     public function buildService(array $service)
     {
-        $arguments = $service['arguments'];
+        $arguments = isset($service['arguments']) ? $service['arguments'] : [];
 
         $injectArgs = [];
         foreach ($arguments as $name => $argument) {
@@ -67,6 +67,8 @@ class Builder
 
             if (is_array($value)) {
                 $value = [$name => $value];
+//                var_dump($value);
+//                exit;
                 $injectArgs = array_merge($injectArgs, $value);
             } else {
                 $injectArgs[$name] = $value;
@@ -83,22 +85,22 @@ class Builder
      * @param string $name
      * @return array
      */
-    protected function resolveReference($argument, string $name)
+    protected function resolveReference($argument)
     {
         $path = explode('.', substr($argument, 1));
-        $injectArgs = [];
+        $result = null;
         foreach ($path as $pointer) {
             $value = $this->config->{$pointer};
         }
 
         if (!is_string($value) && isset($value->toArray()['class'])) {
             $serviceData = $value->toArray();
-            $injectArgs[$name] = $this->buildService($serviceData);
+            $result = $this->buildService($serviceData);
         } else {
-            $injectArgs[$name] = $value;
+            $result = $value;
         }
 
-        return $injectArgs;
+        return $result;
     }
 
     /**
@@ -112,10 +114,10 @@ class Builder
         if (is_array($argument)) {
             $value = [];
             foreach ($argument as $name => $v) {
-                $value[$name] = $this->getValue($v, $name);
+                $value[$name] = $this->getValue($v);
             }
         } else {
-            $value = (substr($argument, 0, 1) === '@') ? $this->resolveReference($argument, $name) : $argument;
+            $value = (substr($argument, 0, 1) === '@') ? $this->resolveReference($argument) : $argument;
         }
 
         return $value;
