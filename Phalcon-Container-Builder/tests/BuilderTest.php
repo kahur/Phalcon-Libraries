@@ -62,4 +62,33 @@ class BuilderTest extends TestCase
 
         $this->assertEquals($expect, $service);
     }
+
+    public function testBuildMultiService()
+    {
+        $resource = 'tests/resources/test-multi.yml';
+
+        $config = new Config(
+            new Importer(),
+            new Reader()
+        );
+        $config->addAdapter('yml', Yaml::class);
+
+        $config = $config->fromFile($resource);
+        $di = new FactoryDefault();
+        $builder = new Builder($config, $di);
+        $builder->build();
+
+        /**@var \AW\PhalconContainerBuilder\Test\Stubs\TestMultiClass*/
+        $service = $di->get('myService');
+
+        $settings = [
+            'argument' => 'value',
+            'argument1' => 'value1',
+            'argument2' => 'value2'
+        ];
+
+        $this->assertEquals($settings, $service->getConfig());
+
+        var_dump($service->getConfig());
+    }
 }
