@@ -1,0 +1,7 @@
+services:
+  myService:
+    class: \AW\PhalconContainerBuilder\Test\Stubs\TestMultiClass
+    arguments:
+      - argument: value
+        argument1: value1
+        argument2: value2

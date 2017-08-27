@@ -63,28 +63,62 @@ class Builder
 
         $injectArgs = [];
         foreach ($arguments as $name => $argument) {
-            if (substr($argument, 0, 1) === '@') {
-                $path = explode('.', substr($argument, 1));
 
-                foreach ($path as $pointer) {
-                    $value = $this->config->{$pointer};
-                }
+            $value = [$name => $this->getValue($argument, $name)];
 
-
-                if (!is_string($value) && isset($value->toArray()['class'])) {
-                    $serviceData = $value->toArray();
-                    $injectArgs[$name] = $this->buildService($serviceData);
-                } else {
-                    $injectArgs[$name] = $value;
-                }
+            if (is_array($value)) {
+                $injectArgs = array_merge($injectArgs, $value);
             } else {
-                $injectArgs[$name] = $argument;
+                $injectArgs[$name] = $value;
             }
         }
 
         $serviceObject = new \ReflectionClass($service['class']);
 
         return $serviceObject->newInstanceArgs($injectArgs);
+    }
+
+    /**
+     * @param $argument
+     * @param string $name
+     * @return array
+     */
+    protected function resolveReference($argument, string $name)
+    {
+        $path = explode('.', substr($argument, 1));
+        $injectArgs = [];
+        foreach ($path as $pointer) {
+            $value = $this->config->{$pointer};
+        }
+
+        if (!is_string($value) && isset($value->toArray()['class'])) {
+            $serviceData = $value->toArray();
+            $injectArgs[$name] = $this->buildService($serviceData);
+        } else {
+            $injectArgs[$name] = $value;
+        }
+
+        return $injectArgs;
+    }
+
+    /**
+     * @param $argument
+     * @param null $name
+     * @return array|mixed|null
+     */
+    protected function getValue($argument, $name = null)
+    {
+        $value = null;
+        if (is_array($argument)) {
+            $value = [];
+            foreach ($argument as $name => $v) {
+                $value[$name] = $this->getValue($v, $name);
+            }
+        } else {
+            $value = (substr($argument, 0, 1) === '@') ? $this->resolveReference($argument, $name) : $argument;
+        }
+
+        return $value;
     }
 
 
