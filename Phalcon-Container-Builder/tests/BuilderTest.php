@@ -88,7 +88,5 @@ class BuilderTest extends TestCase
         ];
 
         $this->assertEquals($settings, $service->getConfig());
-
-        var_dump($service->getConfig());
     }
 }
