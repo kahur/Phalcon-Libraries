@@ -62,7 +62,7 @@ class Builder
         $arguments = $service['arguments'];
 
         $injectArgs = [];
-        foreach ($arguments as $argument) {
+        foreach ($arguments as $name => $argument) {
             if (substr($argument, 0, 1) === '@') {
                 $path = explode('.', substr($argument, 1));
 
@@ -73,12 +73,12 @@ class Builder
 
                 if (!is_string($value) && isset($value->toArray()['class'])) {
                     $serviceData = $value->toArray();
-                    $injectArgs[] = $this->buildService($serviceData);
+                    $injectArgs[$name] = $this->buildService($serviceData);
                 } else {
-                    $injectArgs[] = $value;
+                    $injectArgs[$name] = $value;
                 }
             } else {
-                $injectArgs[] = $argument;
+                $injectArgs[$name] = $argument;
             }
         }
 
