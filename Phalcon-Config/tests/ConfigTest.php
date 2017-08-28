@@ -64,7 +64,7 @@ class ConfigTest extends TestCase
 
 
         $reader = $this->getMockBuilder(ReaderInterface::class)
-            ->setMethods(['fromConfig'])
+            ->setMethods(['fromConfig', 'merge'])
             ->getMock();
         $reader
             ->expects($this->once())
@@ -74,5 +74,36 @@ class ConfigTest extends TestCase
         $config->addAdapter('yml', Yaml::class);
 
         $config->fromFile('tests/resources/test.yml');
+    }
+
+    public function testAttach()
+    {
+        $importer = $this->getMockBuilder(ImporterInterface::class)
+            ->setMethods(['import'])
+            ->getMock();
+        $importer
+            ->expects($this->once())
+            ->method('import');
+
+
+        $reader = $this->getMockBuilder(ReaderInterface::class)
+            ->setMethods(['fromConfig', 'merge'])
+            ->getMock();
+
+        $reader
+            ->expects($this->once())
+            ->method('fromConfig');
+
+        $reader
+            ->expects($this->once())
+            ->method('merge');
+
+        $config = new Config($importer, $reader);
+        $config->addAdapter('yml', Yaml::class);
+
+        $config->fromFile('tests/resources/test.yml');
+
+        $config->attach('tests/resources/attach.yml');
+
     }
 }

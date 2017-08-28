@@ -18,4 +18,10 @@ interface ReaderInterface
      * @return ReaderInterface
      */
     public function fromConfig(Config $config);
+
+    /**
+     * @param Config $config
+     * @return void
+     */
+    public function merge(Config $config);
 }

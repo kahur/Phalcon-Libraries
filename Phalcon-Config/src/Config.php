@@ -6,6 +6,8 @@
  * Time: 02:36
  */
 
+declare(strict_types=1);
+
 namespace AW\PhalconConfig;
 
 use AW\PhalconConfig\Exceptions\ClassNotFound;
@@ -102,5 +104,20 @@ class Config
 
         return $this->reader->fromConfig($config);
 
+    }
+
+    /**
+     * @param string $path
+     * @throws FileNotFound
+     */
+    public function attach(string $path)
+    {
+        if (!file_exists($path)) {
+            throw new FileNotFound('File '.$path.' not found');
+        }
+
+        $adapterClass = $this->getAdapter($path);
+        $adapter = new $adapterClass($path);
+        $this->reader->merge($adapter);
     }
 }
