@@ -93,7 +93,7 @@ class Builder
             $value = $this->config->{$pointer};
         }
 
-        if (!is_string($value) && isset($value->toArray()['class'])) {
+        if (is_object($value) && isset($value->toArray()['class'])) {
             $serviceData = $value->toArray();
             $result = $this->buildService($serviceData);
         } else {
