@@ -30,7 +30,7 @@ class Value
      * Value constructor.
      * @param $value
      */
-    public function __construct(string $value)
+    public function __construct($value = null)
     {
         $this->initValue($value);
     }
