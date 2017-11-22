@@ -97,5 +97,54 @@ class ReaderTest extends TestCase
         $this->assertEquals($expected, $data);
     }
 
+    public function testNonSetValue()
+    {
+        $config1 = new Config([
+            'test' => 'tesst1'
+        ]);
+
+        $reader = (new Reader())->fromConfig($config1);
+
+        $this->assertFalse(isset($reader->test1));
+    }
+
+    public function testIsSetValue()
+    {
+        $config1 = new Config([
+            'test' => 'tesst1'
+        ]);
+
+        $reader = (new Reader())->fromConfig($config1);
+
+        $this->assertTrue(isset($reader->test));
+    }
+
+    public function testNestedNonSetValue()
+    {
+        $config1 = new Config([
+            'test' => [
+                'test2'=> 'value'
+            ]
+        ]);
+
+        $reader = (new Reader())->fromConfig($config1);
+
+        $this->assertFalse(isset($reader->test->test1));
+    }
+
+    public function testNestedIsSetValue()
+    {
+        $config1 = new Config([
+            'test' => [
+                'test2'=> 'value'
+            ]
+        ]);
+
+        $reader = (new Reader())->fromConfig($config1);
+
+        $this->assertTrue(isset($reader->test->test2));
+    }
+
+
 
 }
