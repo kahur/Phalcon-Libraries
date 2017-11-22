@@ -91,9 +91,20 @@ class Reader implements ReaderInterface
 
         $this->cursor = null;
 
-        $valueObject = new Value($value);
 
+        $valueObject = new Value($value);
         return $valueObject->getValue([$this, 'get']);
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        $value = $this->get($name);
+
+        return ($value) ? true : false;
     }
 
     /**
