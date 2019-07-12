@@ -40,13 +40,11 @@ class Builder
     public function build()
     {
         $services = $this->config->services->toArray();
-
         $thisObj = $this;
         foreach ($services as $name => $service) {
             $this->di->set($name, function () use ($service, $thisObj) {
                 $service = $thisObj->buildService($service);
                 return $service;
-
             });
         }
 
@@ -74,7 +72,6 @@ class Builder
                 $injectArgs[$name] = $value;
             }
         }
-
         $serviceObject = new \ReflectionClass($service['class']);
 
         return $serviceObject->newInstanceArgs($injectArgs);
@@ -99,7 +96,6 @@ class Builder
         } else {
             $result = $value;
         }
-
         return $result;
     }
 

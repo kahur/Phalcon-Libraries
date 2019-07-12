@@ -86,7 +86,7 @@ class Config
      *
      * @return ReaderInterface
      */
-    public function fromFile(string $path)
+    public function fromFile(string $path, $merge = false)
     {
         if (!file_exists($path)) {
             throw new FileNotFound('File '.$path. 'not found');
@@ -100,6 +100,12 @@ class Config
 
         if (!empty($config->import)) {
             $this->importer->import($config, [$this, 'getAdapter']);
+        }
+
+        if ($merge) {
+            $this->reader->merge($config);
+
+            return $this->reader;
         }
 
         return $this->reader->fromConfig($config);
