@@ -65,8 +65,6 @@ class Builder
 
             if (is_array($value)) {
                 $value = [$name => $value];
-//                var_dump($value);
-//                exit;
                 $injectArgs = array_merge($injectArgs, $value);
             } else {
                 $injectArgs[$name] = $value;
