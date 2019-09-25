@@ -30,6 +30,11 @@ class Reader implements ReaderInterface
      */
     public function fromConfig(Config $config)
     {
+        if ($this->config) {
+           $this->config->merge($config);
+           return $this; 
+        }
+        
         $this->config = $config;
 
         return $this;
