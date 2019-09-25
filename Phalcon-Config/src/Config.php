@@ -107,6 +107,11 @@ class Config
 
             return $this->reader;
         }
+        
+        if ($this->reader) {
+          $this->reader->merge($config);
+          return $this->reader;  
+        }
 
         return $this->reader->fromConfig($config);
 
