@@ -1,5 +1,5 @@
 {
-   "name" : "Phalcon-Libraries",
+   "name" : "kh/phalconLibraries",
    "autoload" : {
       "psr-4" : {
          "AW\\PhalconContainerBuilder\\" : "Phalcon-Container-Builder/src/",
