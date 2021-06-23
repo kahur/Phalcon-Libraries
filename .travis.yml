@@ -6,13 +6,10 @@ php:
 
 sudo: false
 
-notifications:
-  email: false
-  slack: "kompitech:LQltpoDQG8cAjMiGxwY9pWGf"
-
 before_install:
   - pecl channel-update pecl.php.net
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install yaml < /dev/null &)
+  - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install psr < /dev/null &)
   
 script:
   - composer update && ./vendor/bin/install-phalcon.sh
