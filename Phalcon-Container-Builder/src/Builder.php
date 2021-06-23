@@ -43,8 +43,12 @@ class Builder
         $thisObj = $this;
         foreach ($services as $name => $service) {
             $this->di->set($name, function () use ($service, $thisObj) {
-                $service = $thisObj->buildService($service);
-                return $service;
+                $serviceObj = $thisObj->buildService($service);
+                if (isset($service['calls'])) {
+                    $thisObj->serviceInitCalls($serviceObj, $service['calls']);
+                }
+
+                return $serviceObj;
             });
         }
 
@@ -73,6 +77,32 @@ class Builder
         $serviceObject = new \ReflectionClass($service['class']);
 
         return $serviceObject->newInstanceArgs($injectArgs);
+    }
+
+    public function serviceInitCalls($serviceObject, array $calls)
+    {
+        foreach($calls as $call) {
+            $method = $call['method'] ?? null;
+            $arguments = $call['arguments'] ?? [];
+
+            if (!$method) {
+                continue;
+            }
+
+            $injectArgs = [];
+            foreach ($arguments as $name => $argument) {
+                $value = $this->getValue($argument, $name);
+
+                if (is_array($value)) {
+                    $value = [$name => $value];
+                    $injectArgs = array_merge($injectArgs, $value);
+                } else {
+                    $injectArgs[$name] = $value;
+                }
+            }
+
+            call_user_func_array([$serviceObject, $method], $injectArgs);
+        }
     }
 
     /**
