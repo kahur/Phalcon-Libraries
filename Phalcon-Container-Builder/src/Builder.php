@@ -9,11 +9,22 @@
 namespace AW\PhalconContainerBuilder;
 
 use AW\PhalconConfig\Config;
+use AW\PhalconConfig\Interfaces\ReaderInterface;
 use AW\PhalconConfig\Reader;
 use Phalcon\Di;
 
 class Builder
 {
+    /**
+     * @var bool
+     */
+    protected $debug = false;
+
+    /**
+     * @var array
+     */
+    protected $debugParams = [];
+
     /**
      * @var Config
      */
@@ -42,6 +53,15 @@ class Builder
         $services = $this->config->services->toArray();
         $thisObj = $this;
         foreach ($services as $name => $service) {
+            $this->debug = $service['debug'] ?? false;
+
+            // debug mode for building service
+            if ($this->debug) {
+                $this->debugParams['service'] = $service;
+                $this->debugMode($service);
+                return;
+            }
+
             $this->di->set($name, function () use ($service, $thisObj) {
                 $serviceObj = $thisObj->buildService($service);
                 if (isset($service['calls'])) {
@@ -74,6 +94,11 @@ class Builder
                 $injectArgs[$name] = $value;
             }
         }
+
+        if ($this->debug) {
+            $this->debugParams['construct_arguments'] = $injectArgs;
+        }
+
         $serviceObject = new \ReflectionClass($service['class']);
 
         return $serviceObject->newInstanceArgs($injectArgs);
@@ -81,12 +106,20 @@ class Builder
 
     public function serviceInitCalls($serviceObject, array $calls)
     {
+        if ($this->debug) {
+            $this->debugParams['serviceCalls'] = [];
+        }
+
         foreach($calls as $call) {
             $method = $call['method'] ?? null;
             $arguments = $call['arguments'] ?? [];
 
             if (!$method) {
                 continue;
+            }
+
+            if ($this->debug) {
+                $this->debugParams['serviceCalls'][$method] = [];
             }
 
             $injectArgs = [];
@@ -101,8 +134,34 @@ class Builder
                 }
             }
 
+            if ($this->debug) {
+                $this->debugParams['serviceCalls'][$method] = $injectArgs;
+            }
+
             call_user_func_array([$serviceObject, $method], $injectArgs);
         }
+    }
+
+    /**
+     * Will build service upfront and display all values used to build the service
+     * @param array $service
+     */
+    protected function debugMode(array $service)
+    {
+        try {
+            $obj = $this->buildService($service);
+            if (isset($service['calls'])) {
+                $this->serviceInitCalls($serviceObj, $service['calls']);
+            }
+        } catch (\Exception $e) {
+
+        }
+
+        echo "<pre>";
+            print_r($this->debugParams);
+        echo "</pre>";
+        $this->debugParams = [];
+        exit;
     }
 
     /**
@@ -144,7 +203,19 @@ class Builder
             $value = (substr($argument, 0, 1) === '@') ? $this->resolveReference($argument) : $argument;
         }
 
-        return $value;
+        if (is_string($value)) {
+            return (string) $value;
+        }
+
+        if ($value instanceof ReaderInterface) {
+            return $value->toArray();
+        }
+
+        if (is_object($value)) {
+            return $value;
+        }
+
+        return $value->toArray();
     }
 
 
