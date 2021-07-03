@@ -104,6 +104,10 @@ class Builder
         return $serviceObject->newInstanceArgs($injectArgs);
     }
 
+    /**
+     * @param $serviceObject
+     * @param array $calls
+     */
     public function serviceInitCalls($serviceObject, array $calls)
     {
         if ($this->debug) {
@@ -151,7 +155,7 @@ class Builder
         try {
             $obj = $this->buildService($service);
             if (isset($service['calls'])) {
-                $this->serviceInitCalls($serviceObj, $service['calls']);
+                $this->serviceInitCalls($obj, $service['calls']);
             }
         } catch (\Exception $e) {
 
@@ -203,15 +207,19 @@ class Builder
             $value = (substr($argument, 0, 1) === '@') ? $this->resolveReference($argument) : $argument;
         }
 
-        if (is_string($value)) {
-            return (string) $value;
-        }
-
         if ($value instanceof ReaderInterface) {
             return $value->toArray();
         }
 
-        if (is_object($value)) {
+        if (is_numeric($value)) {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            return (string) $value;
+        }
+
+        if (is_object($value) || is_array($value)) {
             return $value;
         }
 
