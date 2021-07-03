@@ -13,4 +13,4 @@ before_install:
   
 script:
   - git clone https://github.com/phalcon/cphalcon && cd cphalcon && git checkout tags/v4.0.0 ./ && cd build && ./install
-  - cd Phalcon-Config && composer update && ./vendor/bin/phpunit
+  - cd ../../Phalcon-Config && composer update && ./vendor/bin/phpunit
