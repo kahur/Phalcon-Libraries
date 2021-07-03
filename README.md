@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/KompiTech/Phalcon-Libraries.svg?token=fvycuVpQ5sgqgjoFZUaq&branch=master)](https://travis-ci.com/KompiTech/Phalcon-Libraries)
+[![Build Status](https://app.travis-ci.com/kahur/Phalcon-Libraries.svg?branch=Master)](https://travis-ci.com/kahur/Phalcon-Libraries)
 
 # Phalcon-Libraries
 
