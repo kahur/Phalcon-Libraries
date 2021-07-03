@@ -21,7 +21,7 @@ before_install:
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon -b $PHALCON_VERSION
   - (cd cphalcon/build; ./install)
-  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
+  - echo "extension=phalcon.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
   - cd ../../Phalcon-Config && composer update && ./vendor/bin/phpunit
