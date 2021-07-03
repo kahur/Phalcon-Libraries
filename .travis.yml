@@ -11,7 +11,7 @@ git:
 
 env:
   matrix:
-    - PHALCON_VERSION="v4.0.0"
+    - PHALCON_VERSION="4.0.x"
 
 before_install:
   - pecl channel-update pecl.php.net
@@ -22,6 +22,6 @@ install:
   - git clone https://github.com/phalcon/cphalcon -b {$PHALCON_VERSION}
   - (cd cphalcon/build; ./install)
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
-  
+
 script:
   - cd ../../Phalcon-Config && composer update && ./vendor/bin/phpunit
