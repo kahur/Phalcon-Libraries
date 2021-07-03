@@ -11,7 +11,7 @@ git:
 
 env:
   matrix:
-    - PHALCON_VERSION="4.0.x"
+    - PHALCON_VERSION="v4.0.0"
 
 before_install:
   - pecl channel-update pecl.php.net
@@ -19,7 +19,7 @@ before_install:
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install psr < /dev/null &)
 
 install:
-  - git clone https://github.com/phalcon/cphalcon -b {$PHALCON_VERSION}
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon -b {$PHALCON_VERSION}
   - (cd cphalcon/build; ./install)
   - phpenv config-add cphalcon/tests/_ci/phalcon.ini
 
