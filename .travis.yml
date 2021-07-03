@@ -1,16 +1,27 @@
 language: php
 
 php:
-  - 7
-  - 7.1
+  - 7.2
+  - 7.4
 
 sudo: false
+
+git:
+  depth: 1
+
+env:
+  matrix:
+    - PHALCON_VERSION="v4.0.0"
 
 before_install:
   - pecl channel-update pecl.php.net
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install yaml < /dev/null &)
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install psr < /dev/null &)
+
+install:
+  - git clone https://github.com/phalcon/cphalcon -b {$PHALCON_VERSION}
+  - (cd cphalcon/build; ./install)
+  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
   
 script:
-  - git clone https://github.com/phalcon/cphalcon && cd cphalcon && git checkout tags/v4.0.0 ./ && cd build && ./install
   - cd ../../Phalcon-Config && composer update && ./vendor/bin/phpunit
