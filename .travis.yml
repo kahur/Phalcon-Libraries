@@ -12,5 +12,5 @@ before_install:
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install psr < /dev/null &)
   
 script:
-  - composer update && ./vendor/bin/install-phalcon.sh 4.0.x
+  - git clone https://github.com/phalcon/cphalcon && cd cphalcon && git checkout tags/v4.0.0 ./ && cd build && ./install
   - cd Phalcon-Config && composer update && ./vendor/bin/phpunit
