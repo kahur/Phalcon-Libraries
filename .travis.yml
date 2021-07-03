@@ -6,11 +6,23 @@ php:
 
 sudo: false
 
+git:
+  depth: 1
+
+env:
+  matrix:
+    - PHALCON_VERSION="v4.0.0"
+
 before_install:
   - pecl channel-update pecl.php.net
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install yaml < /dev/null &)
   - (CFLAGS="-O1 -g3 -fno-strict-aliasing"; pecl install psr < /dev/null &)
-  
+
+install:
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon -b $PHALCON_VERSION
+  - (cd cphalcon/build; ./install)
+  - echo "extension=phalcon.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 script:
-  - composer update && ./vendor/bin/install-phalcon.sh
   - cd Phalcon-Config && composer update && ./vendor/bin/phpunit
+  - cd ../Phalcon-Container-Builder && composer update && ./vendor/bin/phpunit
