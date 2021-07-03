@@ -24,4 +24,5 @@ install:
   - echo "extension=phalcon.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
-  - cd ../../Phalcon-Config && composer update && ./vendor/bin/phpunit
+  - cd Phalcon-Config && composer update && ./vendor/bin/phpunit
+  - cd ../Phalcon-Container-Builder && composer update && ./vendor/bin/phpunit
