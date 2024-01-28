@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Install dependencies
-      run: cd Phalcon-Config && composer install --prefer-dist --no-progress && cd ../Phalcon-Container-Builder && composer install --prefer-dist --no-progress
+      run: cd Phalcon-Config && composer update --prefer-dist --no-progress && cd ../Phalcon-Container-Builder && composer update --prefer-dist --no-progress
 
     - name: Install phalcon
       uses: shivammathur/setup-php@2.29.0
