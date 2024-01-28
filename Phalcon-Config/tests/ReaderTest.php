@@ -23,7 +23,7 @@ class ReaderTest extends TestCase
             ->setConstructorArgs([
                 'tests/resources/test.yml'
             ])
-            ->setMethods(['merge'])
+            ->onlyMethods(['merge'])
             ->getMock();
     }
 
