@@ -9,7 +9,7 @@
 namespace AW\PhalconConfig\Tests;
 
 use AW\PhalconConfig\Reader;
-use Phalcon\Config\Configgit ;
+use Phalcon\Config\Config;
 use Phalcon\Config\Adapter\Yaml;
 use PHPUnit\Framework\TestCase;
 
