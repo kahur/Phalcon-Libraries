@@ -110,9 +110,12 @@ class Reader implements ReaderInterface
      */
     public function __isset($name)
     {
-        $value = $this->get($name);
-
-        return ($value) ? true : false;
+        try {
+            $this->get($name);
+            return true;
+        } catch (\RuntimeException $e) {
+            return false;
+        }
     }
 
     /**
