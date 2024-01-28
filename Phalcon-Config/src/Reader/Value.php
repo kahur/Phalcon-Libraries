@@ -40,7 +40,7 @@ class Value
      */
     public function initValue($value)
     {
-        $pointer = substr($value, 0, 1);
+        $pointer = $value ? substr($value, 0, 1) : null;
 
         switch ($pointer) {
             case '@':

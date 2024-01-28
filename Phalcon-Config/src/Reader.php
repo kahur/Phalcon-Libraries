@@ -10,7 +10,7 @@ namespace AW\PhalconConfig;
 
 use AW\PhalconConfig\Interfaces\ReaderInterface;
 use AW\PhalconConfig\Reader\Value;
-use Phalcon\Config;
+use Phalcon\Config\ConfigInterface;
 
 class Reader implements ReaderInterface
 {
@@ -28,7 +28,7 @@ class Reader implements ReaderInterface
      * @param Config $config
      * @return Reader
      */
-    public function fromConfig(Config $config)
+    public function fromConfig(ConfigInterface $config)
     {
         if ($this->config) {
            $this->config->merge($config);
@@ -96,6 +96,9 @@ class Reader implements ReaderInterface
 
         $this->cursor = null;
 
+        if (!$value) {
+            throw new \RuntimeException('No value found');
+        }
 
         $valueObject = new Value($value);
         return $valueObject->getValue([$this, 'get']);
@@ -127,9 +130,9 @@ class Reader implements ReaderInterface
     }
 
     /**
-     * @param Config $config]
+     * @param ConfigInterface $config
      */
-    public function merge(Config $config)
+    public function merge(ConfigInterface $config)
     {
         $this->config->merge($config);
     }

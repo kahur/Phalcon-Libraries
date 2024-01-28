@@ -26,7 +26,7 @@ class Builder
     protected $debugParams = [];
 
     /**
-     * @var Config
+     * @var ReaderInterface
      */
     protected $config;
 
@@ -37,9 +37,9 @@ class Builder
 
     /**
      * Builder constructor.
-     * @param Config $config
+     * @param ReaderInterface $config
      */
-    public function __construct(Reader $config, Di $di)
+    public function __construct(ReaderInterface $config, Di $di)
     {
         $this->config = $config;
         $this->di = $di;

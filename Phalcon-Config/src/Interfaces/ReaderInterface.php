@@ -9,19 +9,19 @@
 namespace AW\PhalconConfig\Interfaces;
 
 
-use Phalcon\Config;
+use Phalcon\Config\ConfigInterface;
 
 interface ReaderInterface
 {
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      * @return ReaderInterface
      */
-    public function fromConfig(Config $config);
+    public function fromConfig(ConfigInterface $config);
 
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      * @return void
      */
-    public function merge(Config $config);
+    public function merge(ConfigInterface $config);
 }

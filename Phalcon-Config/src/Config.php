@@ -57,7 +57,7 @@ class Config
 
     /**
      * @param string $path
-     * @return \Phalcon\Config|null
+     * @return \Phalcon\Config\ConfigInterface|null
      */
     public function getAdapter(string $path)
     {
@@ -72,7 +72,7 @@ class Config
 
         $adapter = new $adapterClass($path);
 
-        if (!$adapter instanceof \Phalcon\Config) {
+        if (!$adapter instanceof \Phalcon\Config\ConfigInterface) {
             throw new UnsupportedAdapter('Unsupported adapter');
         }
 
@@ -99,7 +99,8 @@ class Config
         $config = new $adapterClass($path);
 
         if (!empty($config->import)) {
-            $this->importer->import($config, [$this, 'getAdapter']);
+            $realPath = realpath($path);
+            $this->importer->import($config, [$this, 'getAdapter'], $realPath);
         }
 
         if ($merge) {

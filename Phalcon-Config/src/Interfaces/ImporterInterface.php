@@ -8,15 +8,16 @@
 
 namespace AW\PhalconConfig\Interfaces;
 
-use Phalcon\Config;
+use Phalcon\Config\ConfigInterface;
 
 interface ImporterInterface
 {
     /**
-     * Import list of resourcesz
+     * @param ConfigInterface $config
+     * @param callable $adapterCallback
+     * @param string $realPath
      *
-     * @param Config $config
-     * @return Config
+     * @return ConfigInterface
      */
-    public function import(Config $config, callable $adapterCallback);
+    public function import(ConfigInterface $config, callable $adapterCallback, string $realPath);
 }
