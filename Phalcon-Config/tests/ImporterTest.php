@@ -39,6 +39,6 @@ class ImporterTest extends TestCase
 
         $importer->import($adapter, function($arguments) use($config){
             return $config->getAdapter($arguments);
-        });
+        }, './path');
     }
 }
