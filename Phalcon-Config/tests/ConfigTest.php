@@ -29,7 +29,7 @@ class ConfigTest extends TestCase
      */
     protected $reader;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->importer = $this->getMockBuilder(ImporterInterface::class)->getMock();
         $this->reader = $this->getMockBuilder(ReaderInterface::class)->getMock();

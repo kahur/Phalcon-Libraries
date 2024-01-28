@@ -17,7 +17,7 @@ class ReaderTest extends TestCase
 {
     protected $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->config = $this->getMockBuilder(Yaml::class)
             ->setConstructorArgs([
