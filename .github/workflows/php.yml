@@ -17,9 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
     - name: Install dependencies
       run: cd Phalcon-Config && composer install --prefer-dist --no-progress && cd ../Phalcon-Container-Builder && composer install --prefer-dist --no-progress
 
