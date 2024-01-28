@@ -8,9 +8,7 @@
 
 namespace AW\PhalconContainerBuilder;
 
-use AW\PhalconConfig\Config;
 use AW\PhalconConfig\Interfaces\ReaderInterface;
-use AW\PhalconConfig\Reader;
 use Phalcon\Di;
 
 class Builder
@@ -39,7 +37,7 @@ class Builder
      * Builder constructor.
      * @param ReaderInterface $config
      */
-    public function __construct(ReaderInterface $config, Di $di)
+    public function __construct(ReaderInterface $config, Di\DiInterface $di)
     {
         $this->config = $config;
         $this->di = $di;
