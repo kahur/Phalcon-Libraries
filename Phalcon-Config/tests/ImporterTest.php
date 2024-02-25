@@ -22,7 +22,7 @@ class ImporterTest extends TestCase
             ->setConstructorArgs([
                 'tests/resources/test.yml'
             ])
-            ->setMethods(['merge'])
+            ->onlyMethods(['merge'])
             ->getMock();
 
         $adapter->expects($this->once())
@@ -30,7 +30,7 @@ class ImporterTest extends TestCase
 
         $config = $this->getMockBuilder(\AW\PhalconConfig\Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAdapter'])
+            ->onlyMethods(['getAdapter'])
             ->getMock();
 
         $config->expects($this->once())
@@ -39,6 +39,6 @@ class ImporterTest extends TestCase
 
         $importer->import($adapter, function($arguments) use($config){
             return $config->getAdapter($arguments);
-        });
+        }, './path');
     }
 }

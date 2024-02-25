@@ -9,7 +9,7 @@
 namespace AW\PhalconConfig\Tests;
 
 use AW\PhalconConfig\Reader;
-use Phalcon\Config;
+use Phalcon\Config\Config;
 use Phalcon\Config\Adapter\Yaml;
 use PHPUnit\Framework\TestCase;
 
@@ -17,13 +17,13 @@ class ReaderTest extends TestCase
 {
     protected $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->config = $this->getMockBuilder(Yaml::class)
             ->setConstructorArgs([
                 'tests/resources/test.yml'
             ])
-            ->setMethods(['merge'])
+            ->onlyMethods(['merge'])
             ->getMock();
     }
 

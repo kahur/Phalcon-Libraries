@@ -10,29 +10,62 @@ namespace AW\PhalconConfig;
 
 use AW\PhalconConfig\Exceptions\FileNotFound;
 use AW\PhalconConfig\Interfaces\ImporterInterface;
-use Phalcon\Config;
+use Phalcon\Config\ConfigInterface;
 
 class Importer implements ImporterInterface
 {
 
     /**
-     * Import list of resourcesz
+     * @param ConfigInterface $config
+     * @param callable $adapterCallback
+     * @param string $realPath
+     * @return ConfigInterface
      *
-     * @param Config $config
-     * @return Config
+     * @throws FileNotFound
      */
-    public function import(Config $config, callable $adapterCallback)
+    public function import(ConfigInterface $config, callable $adapterCallback, string $realPath)
     {
         foreach ($config->import as $resourceConfig) {
-            if (!file_exists($resourceConfig->resource)) {
-                throw new FileNotFound('File: '.$resourceConfig->resource. 'not found.');
+            $source = is_string($resourceConfig) ? $resourceConfig : null;
+
+            if ($source && is_object($resourceConfig) && empty($resourceConfig->resource)) {
+                throw new \RuntimeException('Invalid configuration format');
             }
 
-            $importedConfig = call_user_func($adapterCallback, $resourceConfig->resource);
+            $source = $source ?? $resourceConfig->resource;
+
+            $source = $this->getRealConfigPath($realPath, $source);
+
+            if (!file_exists($source)) {
+                throw new FileNotFound('File: '.$source. ' not found.');
+            }
+
+            $importedConfig = call_user_func($adapterCallback, $source);
+
+            if (isset($importedConfig->import)) {
+                $path = realpath($source);
+                $this->import($importedConfig, $adapterCallback, $path);
+                unset($importedConfig->import);
+            }
 
             $config->merge($importedConfig);
         }
 
         return $config;
+    }
+
+    protected function getRealConfigPath($sourceConfigPath, $configPath)
+    {
+        $directory = dirname($sourceConfigPath);
+
+        if (substr($configPath, 0, 2) === './') {
+            return $directory . DIRECTORY_SEPARATOR . substr($configPath, 2);
+        }
+
+        if (substr($configPath, 0, 1) !== '/') {
+            return $directory . DIRECTORY_SEPARATOR . $configPath;
+        }
+
+        return $configPath;
     }
 }

@@ -20,7 +20,8 @@ use PHPUnit\Framework\TestCase;
 class BuilderTest extends TestCase
 {
     protected $config;
-    public function setUp()
+
+    public function setUp(): void
     {
         $resource = 'tests/resources/test.yml';
 
