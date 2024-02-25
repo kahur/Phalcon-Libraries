@@ -126,10 +126,16 @@ class Reader implements ReaderInterface
         $cursor = $this->getCursor();
 
         if ($cursor) {
-            return $this->config->path($cursor)->toArray();
+            $data = $this->config->path($cursor)->toArray();
+//            $this->cursor = null;
+
+            return $data;
         }
 
-        return $this->config->toArray();
+        $data = $this->config->toArray();
+//        $this->cursor = null;
+
+        return $data;
     }
 
     /**
@@ -138,5 +144,23 @@ class Reader implements ReaderInterface
     public function merge(ConfigInterface $config)
     {
         $this->config->merge($config);
+    }
+
+    /**
+     * @param ConfigInterface $config
+     * @return ReaderInterface
+     */
+    public function newInstance(ConfigInterface $config): ReaderInterface
+    {
+        return (new self)->fromConfig($config);
+    }
+
+    /**
+     * @param string $pointer
+     * @return mixed
+     */
+    public function getValue(string $pointer)
+    {
+        return $this->config->path($pointer);
     }
 }

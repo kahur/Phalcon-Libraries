@@ -9,7 +9,9 @@
 namespace AW\PhalconContainerBuilder;
 
 use AW\PhalconConfig\Interfaces\ReaderInterface;
+use AW\PhalconContainerBuilder\Interfaces\ServiceProviderInterface;
 use Phalcon\Di;
+use Phalcon\Events\Manager;
 
 class Builder
 {
@@ -26,7 +28,7 @@ class Builder
     /**
      * @var ReaderInterface
      */
-    protected $config;
+    protected $services;
 
     /**
      * @var Di
@@ -34,13 +36,19 @@ class Builder
     protected $di;
 
     /**
-     * Builder constructor.
-     * @param ReaderInterface $config
+     * @var ReaderInterface
      */
-    public function __construct(ReaderInterface $config, Di\DiInterface $di)
+    protected $config;
+
+    /**
+     * Builder constructor.
+     * @param ReaderInterface $services
+     */
+    public function __construct(ReaderInterface $services, Di\DiInterface $di)
     {
-        $this->config = $config;
+        $this->services = $services;
         $this->di = $di;
+        $this->config = $di->getShared('config');
     }
 
     /**
@@ -48,8 +56,11 @@ class Builder
      */
     public function build()
     {
-        $services = $this->config->services->toArray();
+        $services = $this->services->toArray();
         $thisObj = $this;
+
+        $this->resolvePreInitializeServices($services);
+
         foreach ($services as $name => $service) {
             $this->debug = $service['debug'] ?? false;
 
@@ -60,16 +71,61 @@ class Builder
                 return;
             }
 
+            if (isset($service['provider'])) {
+                $this->resolveProviderService($name, $service);
+                continue;
+            }
+
             $this->di->set($name, function () use ($service, $thisObj) {
                 $serviceObj = $thisObj->buildService($service);
-                if (isset($service['calls'])) {
-                    $thisObj->serviceInitCalls($serviceObj, $service['calls']);
-                }
 
                 return $serviceObj;
-            });
+            }, (isset($service['shared']) && $service['shared']) ? true : false);
+        }
+    }
+
+    /**
+     * @param array $services
+     * @return void
+     */
+    protected function resolvePreInitializeServices(array &$services)
+    {
+        foreach ($services as $name => $service) {
+            if (isset($service['preInitialize']) && $service['preInitialize']) {
+                $serviceObj = $this->buildService($service);
+
+                $this->di->set($name, $serviceObj, (isset($service['shared']) && $service['shared']) ? true : false);
+
+                unset($services[$name]);
+            }
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param array $service
+     * @return void
+     * @throws \Exception
+     */
+    protected function resolveProviderService(string $name, array $service)
+    {
+        $provider = new $service['provider'];
+
+        if ($provider instanceof ServiceProviderInterface) {
+            $config = $this->di->getConfig();
+            $this->di->set($name, function() use($config, $provider) {
+                return $provider->build($config);
+            }, (isset($service['shared']) && $service['shared'] == true) ? true : false);
+
+            return;
         }
 
+        if ($provider instanceof Di\ServiceProviderInterface) {
+            $provider->register($this->di);
+            return;
+        }
+
+        throw new \Exception('Unknown provider');
     }
 
     /**
@@ -97,9 +153,15 @@ class Builder
             $this->debugParams['construct_arguments'] = $injectArgs;
         }
 
-        $serviceObject = new \ReflectionClass($service['class']);
+        $reflection = new \ReflectionClass($service['className']);
+        
+        $serviceObject = $reflection->newInstanceArgs($injectArgs);
 
-        return $serviceObject->newInstanceArgs($injectArgs);
+        if (isset($service['calls'])) {
+            $this->serviceInitCalls($serviceObject, $service['calls']);
+        }
+
+        return $serviceObject;
     }
 
     /**
@@ -173,19 +235,24 @@ class Builder
      */
     protected function resolveReference($argument)
     {
+        $cursor = substr($argument, 1);
+        $this->services->setCursor($cursor);
         $path = explode('.', substr($argument, 1));
         $result = null;
-        foreach ($path as $pointer) {
-            $value = $this->config->{$pointer};
+
+        // try to get service
+        $value = $this->services->getValue($cursor) ?? $this->config->getValue($cursor);
+
+        if (!$value) {
+            throw new \Exception("Service or param not found");
         }
 
-        if (is_object($value) && isset($value->toArray()['class'])) {
+        if (is_object($value) && isset($value->toArray()['className'])) {
             $serviceData = $value->toArray();
-            $result = $this->buildService($serviceData);
-        } else {
-            $result = $value;
+            return $this->buildService($serviceData);
         }
-        return $result;
+
+        return is_object($value) ? $value->toArray() : $value;
     }
 
     /**

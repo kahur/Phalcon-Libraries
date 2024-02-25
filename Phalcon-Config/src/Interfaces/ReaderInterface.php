@@ -24,4 +24,15 @@ interface ReaderInterface
      * @return void
      */
     public function merge(ConfigInterface $config);
+
+    /**
+     * @return $this
+     */
+    public function newInstance(ConfigInterface $config): self;
+
+    /**
+     * @param string $pointer
+     * @return mixed
+     */
+    public function getValue(string $pointer);
 }

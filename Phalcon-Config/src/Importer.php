@@ -42,6 +42,12 @@ class Importer implements ImporterInterface
 
             $importedConfig = call_user_func($adapterCallback, $source);
 
+            if (isset($importedConfig->import)) {
+                $path = realpath($source);
+                $this->import($importedConfig, $adapterCallback, $path);
+                unset($importedConfig->import);
+            }
+
             $config->merge($importedConfig);
         }
 
