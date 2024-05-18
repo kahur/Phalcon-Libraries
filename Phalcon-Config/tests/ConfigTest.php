@@ -86,9 +86,7 @@ class ConfigTest extends TestCase
             ->method('import');
 
 
-        $reader = $this->getMockBuilder(ReaderInterface::class)
-            ->onlyMethods(['fromConfig', 'merge'])
-            ->getMock();
+        $reader = $this->createMock(ReaderInterface::class);
 
         $reader
             ->expects($this->once())
