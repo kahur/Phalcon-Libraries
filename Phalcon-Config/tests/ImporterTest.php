@@ -20,7 +20,7 @@ class ImporterTest extends TestCase
 
         $adapter = $this->getMockBuilder(Config\Adapter\Yaml::class)
             ->setConstructorArgs([
-                'tests/resources/test.yml'
+                (__DIR__) . '/resources/test.yml'
             ])
             ->onlyMethods(['merge'])
             ->getMock();
