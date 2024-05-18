@@ -31,15 +31,13 @@ class ConfigTest extends TestCase
 
     public function setUp(): void
     {
-        $importer = $this->getMockBuilder(ImporterInterface::class);
-        $importer->onlyMethods(['import']);
+        $importer = $this->createMock(ImporterInterface::class);
 
-        $this->importer = $importer->getMock();
+        $this->importer = $importer;
 
-        $reader = $this->getMockBuilder(ReaderInterface::class);
-        $reader->onlyMethods(['fromConfig', 'newInstance', 'merge', 'getValue']);
+        $reader = $this->createMock(ReaderInterface::class);
 
-        $this->reader = $reader->getMock();
+        $this->reader = $reader;
     }
 
     public function testAddAdapter()
@@ -62,17 +60,14 @@ class ConfigTest extends TestCase
 
     public function testFromFile()
     {
-        $importer = $this->getMockBuilder(ImporterInterface::class)
-            ->onlyMethods(['import'])
-            ->getMock();
+        $importer = $this->createMock(ImporterInterface::class)
+
         $importer
             ->expects($this->once())
             ->method('import');
 
 
-        $reader = $this->getMockBuilder(ReaderInterface::class)
-            ->onlyMethods(['fromConfig', 'merge'])
-            ->getMock();
+        $reader = $this->createMock(ReaderInterface::class);
         $reader
             ->expects($this->once())
             ->method('fromConfig');
@@ -85,9 +80,7 @@ class ConfigTest extends TestCase
 
     public function testAttach()
     {
-        $importer = $this->getMockBuilder(ImporterInterface::class)
-            ->onlyMethods(['import'])
-            ->getMock();
+        $importer = $this->createMock(ImporterInterface::class);
         $importer
             ->expects($this->once())
             ->method('import');
