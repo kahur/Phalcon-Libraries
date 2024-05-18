@@ -18,7 +18,12 @@ class ImporterTest extends TestCase
     {
         $importer = new Importer();
 
-        $adapter = $this->createMock(Config\Adapter\Yaml::class);
+        $adapter = $this->createMock(Config\Adapter\Yaml::class)
+            ->setConstructorArgs([
+                'resources/test.yml'
+            ])
+            ->onlyMethods(['merge'])
+            ->getMock();
 
         $adapter->expects($this->once())
             ->method('merge');

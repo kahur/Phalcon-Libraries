@@ -1,6 +1,6 @@
 
 import:
-  - { resource: 'tests/resources/test-config.yml' }
+  - './test-config.yml'
 
 test: test
 test1:
