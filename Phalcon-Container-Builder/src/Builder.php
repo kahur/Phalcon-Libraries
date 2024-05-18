@@ -44,11 +44,20 @@ class Builder
      * Builder constructor.
      * @param ReaderInterface $services
      */
-    public function __construct(ReaderInterface $services, Di\DiInterface $di)
+    public function __construct(Di\DiInterface $di, ReaderInterface $services = null)
     {
         $this->services = $services;
         $this->di = $di;
         $this->config = $di->getShared('config');
+    }
+
+    /**
+     * @param ReaderInterface $services
+     * @return void
+     */
+    public function setServices(ReaderInterface $services)
+    {
+        $this->services = $services;
     }
 
     /**
