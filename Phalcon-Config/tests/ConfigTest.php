@@ -60,7 +60,7 @@ class ConfigTest extends TestCase
 
     public function testFromFile()
     {
-        $importer = $this->createMock(ImporterInterface::class)
+        $importer = $this->createMock(ImporterInterface::class);
 
         $importer
             ->expects($this->once())
