@@ -31,8 +31,15 @@ class ConfigTest extends TestCase
 
     public function setUp(): void
     {
-        $this->importer = $this->getMockBuilder(ImporterInterface::class)->getMock();
-        $this->reader = $this->getMockBuilder(ReaderInterface::class)->getMock();
+        $importer = $this->getMockBuilder(ImporterInterface::class);
+        $importer->onlyMethods(['import']);
+
+        $this->importer = $importer->getMock();
+
+        $reader = $this->getMockBuilder(ReaderInterface::class);
+        $reader->onlyMethods(['fromConfig', 'newInstance', 'merge', 'getValue']);
+
+        $this->reader = $reader->getMock();
     }
 
     public function testAddAdapter()
