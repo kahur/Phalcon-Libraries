@@ -18,7 +18,7 @@ class ImporterTest extends TestCase
     {
         $importer = new Importer();
 
-        $adapter = $this->createMock(Config\Adapter\Yaml::class)
+        $adapter = $this->getMockBuilder(Config\Adapter\Yaml::class)
             ->setConstructorArgs([
                 'resources/test.yml'
             ])
